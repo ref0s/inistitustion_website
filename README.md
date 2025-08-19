@@ -1,10 +1,4 @@
-# inistitustion_website
-تمام ✅
-إليك نسخة **README.md** كاملة بصيغة Markdown وجاهزة للرفع على GitHub أو أي مستودع:
 
----
-
-````markdown
 # 📘 نظام إدارة الطلاب  
 
 ## ✨ شرح المشروع
@@ -61,15 +55,19 @@
 1. تأكد أن عندك **Node.js** و **PostgreSQL** مثبتين.  
 2. انسخ المستودع:
    ```bash
-   git clone <repo-url>
-   cd <repo-folder>/server
+   git clone https://github.com/ref0s/inistitustion_website.git
+   cd inistitustion_website/server
 ````
 
 3. أنشئ ملف `.env` وضع فيه إعدادات قاعدة البيانات:
 
    ```env
-   DATABASE_URL=postgres://<USER>:<PASSWORD>@localhost:5432/<DBNAME>
-   PORT=5050
+PORT = 5050
+HOST = localhost
+DB_PORT = 5432
+DATABASE = postgres
+USER = postgres
+PASSWORD = <your_password>
    ```
 4. ثبّت الحزم:
 
@@ -97,7 +95,7 @@
 1. انتقل إلى مجلد الواجهة:
 
    ```bash
-   cd ../client
+   cd inistitustion_website/client
    ```
 2. ثبّت الحزم:
 
@@ -123,7 +121,3 @@
 
 ```
 
----
-
-تحب أضيفلك كمان قسم **لقاعدة البيانات (ERD بسيط أو جداول SQL)** في الـ README عشان يكون عند أي مطور جديد تصور كامل عن الجداول والعلاقات؟
-```
