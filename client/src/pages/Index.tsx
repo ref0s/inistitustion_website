@@ -19,7 +19,7 @@ import {
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import instituteHero from "@/assets/institute-hero.jpg";
-
+import Logo from "@/assets/image-removebg-preview.png";
 const Index = () => {
   const departments = [
     {
@@ -92,22 +92,24 @@ const Index = () => {
         
         <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-4">
           <h1 className="text-5xl md:text-6xl font-bold mb-6">
-            المعهد التقني
-            <span className="block text-3xl md:text-4xl font-normal mt-2 text-primary-light">
-              للتعليم والتدريب
-            </span>
+           المعهد العالي للعلوم والتقنية العربان
           </h1>
           <p className="text-xl md:text-2xl mb-8 leading-relaxed">
-            نقدم أفضل التخصصات التقنية والبرامج التدريبية لإعداد جيل متميز من الخريجين المؤهلين لسوق العمل
+            نقدم أفضل التخصصات التقنية لإعداد جيل متميز من الخريجين المؤهلين لسوق العمل
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" variant="secondary" className="text-lg px-8 py-6">
-              تصفح الأقسام
-              <ArrowRight className="mr-2 h-5 w-5" />
-            </Button>
+            <a href="#deps">
+              <Button size="lg" variant="secondary" className="text-lg px-8 py-6">
+                تصفح الأقسام
+                <ArrowRight className="mr-2 h-5 w-5" />
+              </Button>
+            </a>
+            <a href="#contact">
+
             <Button size="lg" variant="outline" className="text-lg px-8 py-6 border-white text-white hover:bg-white hover:text-primary">
               تواصل معنا
             </Button>
+            </a>
           </div>
         </div>
       </section>
@@ -130,7 +132,7 @@ const Index = () => {
       </section>
 
       {/* الأقسام الدراسية */}
-      <section className="py-20">
+      <section id='deps' className="py-20">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-foreground mb-4">الأقسام الدراسية</h2>
@@ -203,7 +205,7 @@ const Index = () => {
       </section>
 
       {/* بيانات التواصل */}
-      <section className="py-20">
+      <section id='contact' className="py-20">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-foreground mb-4">تواصل معنا</h2>

@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { GraduationCap, User } from "lucide-react";
-
+import Logo from "@/assets/image-removebg-preview.png";
 const Header = () => {
   const navigate = useNavigate();
 
@@ -11,12 +11,11 @@ const Header = () => {
         <div className="flex items-center justify-between">
           {/* شعار المعهد */}
           <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-            <div className="p-2 bg-primary rounded-lg">
-              <GraduationCap className="h-6 w-6 text-primary-foreground" />
+            <div className="p-2 rounded-lg">
+              <img src={Logo} className="w-10 h-10" alt="شعار المعهد" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-foreground">المعهد التقني</h1>
-              <p className="text-sm text-muted-foreground">للتعليم والتدريب</p>
+              <h1 className="text-xl font-bold text-foreground">المعهد العالي للعلوم والتقنية العربان</h1>
             </div>
           </Link>
 
