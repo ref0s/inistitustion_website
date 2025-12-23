@@ -28,19 +28,19 @@ const Header = () => {
               الرئيسية
             </Link>
             <Link 
-              to="/departments" 
+              to="/#deps" 
               className="text-foreground hover:text-primary transition-colors font-medium"
             >
               الأقسام
             </Link>
             <Link 
-              to="/news" 
+              to="/#news" 
               className="text-foreground hover:text-primary transition-colors font-medium"
             >
               الأخبار
             </Link>
             <Link 
-              to="/contact" 
+              to="/#contact" 
               className="text-foreground hover:text-primary transition-colors font-medium"
             >
               تواصل معنا

@@ -1,11 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { 
-  GraduationCap, 
-  Users, 
-  BookOpen, 
-  Award,
+import {
   Calendar,
   MapPin,
   Phone,
@@ -14,7 +10,11 @@ import {
   Code,
   Shield,
   Brain,
-  Database
+  Database,
+  GraduationCap,
+  BookOpen,
+  Award,
+  Users
 } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -23,32 +23,53 @@ import Logo from "@/assets/image-removebg-preview.png";
 const Index = () => {
   const departments = [
     {
-      name: "هندسة البرمجيات",
-      description: "تطوير التطبيقات والأنظمة البرمجية الحديثة",
+      name: "قسم التقنيات الكربائية و الالكترونية (شعبة انظمة القدرة)",
+      description: "تأهيل كوادر في أنظمة القدرة والشبكات الكهربائية.",
+      icon: Award,
+      duration: "حسب الخطة",
+      students: "متاح للتسجيل"
+    },
+    {
+      name: "قسم المختبرات الطبية",
+      description: "تحليل العينات المخبرية وتشخيص الأمراض بدقة.",
+      icon: BookOpen,
+      duration: "حسب الخطة",
+      students: "متاح للتسجيل"
+    },
+    {
+      name: "قسم التمريض العام",
+      description: "رعاية صحية وتمريضية وفق المعايير المهنية.",
+      icon: GraduationCap,
+      duration: "حسب الخطة",
+      students: "متاح للتسجيل"
+    },
+    {
+      name: "قسم الحاسب الالي (شعبة تقنية المعلومات)",
+      description: "إدارة الشبكات والأنظمة وتطوير الحلول التقنية.",
       icon: Code,
-      duration: "4 سنوات",
-      students: "120 طالب"
+      duration: "حسب الخطة",
+      students: "متاح للتسجيل"
     },
     {
-      name: "تقنية المعلومات",
-      description: "إدارة وصيانة الأنظمة والشبكات",
-      icon: Database,
-      duration: "4 سنوات",
-      students: "95 طالب"
+      name: "قسم ادارة الاعمال",
+      description: "إدارة الموارد والتخطيط والتسويق للمؤسسات.",
+      icon: Users,
+      duration: "حسب الخطة",
+      students: "متاح للتسجيل"
     },
     {
-      name: "الأمن السيبراني",
-      description: "حماية البيانات والأنظمة من التهديدات",
+      name: "قسم الصيدلية",
+      description: "العلوم الدوائية وصرف الأدوية بأمان.",
       icon: Shield,
-      duration: "4 سنوات",
-      students: "85 طالب"
+      duration: "حسب الخطة",
+      students: "متاح للتسجيل"
     },
     {
-      name: "الذكاء الاصطناعي",
-      description: "تقنيات التعلم الآلي والذكاء الاصطناعي",
+      name: "قسم العلاج الطبيعي",
+      description: "العلاج الحركي وإعادة التأهيل للمرضى.",
       icon: Brain,
-      duration: "4 سنوات",
-      students: "70 طالب"
+      duration: "حسب الخطة",
+      students: "متاح للتسجيل"
     }
   ];
 
@@ -68,13 +89,6 @@ const Index = () => {
       date: "2024-01-05",
       description: "ورشة تدريبية مجانية للطلاب والمهتمين"
     }
-  ];
-
-  const stats = [
-    { label: "طالب مسجل", value: "370+", icon: Users },
-    { label: "برنامج دراسي", value: "4", icon: BookOpen },
-    { label: "عضو هيئة تدريس", value: "45", icon: GraduationCap },
-    { label: "خريج متميز", value: "850+", icon: Award }
   ];
 
   return (
@@ -106,27 +120,10 @@ const Index = () => {
             </a>
             <a href="#contact">
 
-            <Button size="lg" variant="outline" className="text-lg px-8 py-6 border-white text-white hover:bg-white hover:text-primary">
+            <Button size="lg" variant="outline" className="text-lg px-8 py-6 border-white text-black hover:bg-white hover:text-primary">
               تواصل معنا
             </Button>
             </a>
-          </div>
-        </div>
-      </section>
-
-      {/* إحصائيات المعهد */}
-      <section className="py-16 bg-muted">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="mx-auto p-4 bg-primary/10 rounded-full w-fit mb-4">
-                  <stat.icon className="h-8 w-8 text-primary" />
-                </div>
-                <div className="text-3xl font-bold text-primary mb-2">{stat.value}</div>
-                <div className="text-muted-foreground font-medium">{stat.label}</div>
-              </div>
-            ))}
           </div>
         </div>
       </section>
@@ -170,7 +167,7 @@ const Index = () => {
       </section>
 
       {/* آخر الأخبار والإعلانات */}
-      <section className="py-20 bg-muted">
+      <section id="news" className="py-20 bg-muted">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-foreground mb-4">آخر الأخبار</h2>
@@ -220,8 +217,8 @@ const Index = () => {
                 <Phone className="h-8 w-8 text-primary" />
               </div>
               <h3 className="text-lg font-bold mb-2">اتصل بنا</h3>
-              <p className="text-muted-foreground">+966 11 1234567</p>
-              <p className="text-muted-foreground">+966 11 1234568</p>
+              <p className="text-muted-foreground">+218 21 1234567</p>
+              <p className="text-muted-foreground">+218 21 1234568</p>
             </Card>
             
             <Card className="text-center p-8">
@@ -229,8 +226,8 @@ const Index = () => {
                 <Mail className="h-8 w-8 text-primary" />
               </div>
               <h3 className="text-lg font-bold mb-2">راسلنا</h3>
-              <p className="text-muted-foreground">info@techinstitute.edu.sa</p>
-              <p className="text-muted-foreground">admin@techinstitute.edu.sa</p>
+              <p className="text-muted-foreground">info@techinstitute.edu.ly</p>
+              <p className="text-muted-foreground">admin@techinstitute.edu.ly</p>
             </Card>
             
             <Card className="text-center p-8">
@@ -238,8 +235,8 @@ const Index = () => {
                 <MapPin className="h-8 w-8 text-primary" />
               </div>
               <h3 className="text-lg font-bold mb-2">زوروا</h3>
-              <p className="text-muted-foreground">الرياض، حي النخيل</p>
-              <p className="text-muted-foreground">المملكة العربية السعودية</p>
+              <p className="text-muted-foreground">ترهونة</p>
+              <p className="text-muted-foreground">ليبيا</p>
             </Card>
           </div>
         </div>

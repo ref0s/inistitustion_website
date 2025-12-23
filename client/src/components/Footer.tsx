@@ -41,15 +41,15 @@ const Footer = () => {
             <div className="space-y-3 text-sm">
               <div className="flex items-center gap-3 text-muted-foreground">
                 <Phone className="h-4 w-4 text-primary" />
-                <span>+966 11 1234567</span>
+                <span>+218 21 1234567</span>
               </div>
               <div className="flex items-center gap-3 text-muted-foreground">
                 <Mail className="h-4 w-4 text-primary" />
-                <span>info@techinstitute.edu.sa</span>
+                <span>info@techinstitute.edu.ly</span>
               </div>
               <div className="flex items-center gap-3 text-muted-foreground">
                 <MapPin className="h-4 w-4 text-primary" />
-                <span>الرياض، المملكة العربية السعودية</span>
+                <span>ترهونة، ليبيا</span>
               </div>
             </div>
             
@@ -68,12 +68,6 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* خط الفصل وحقوق النشر */}
-        <div className="border-t border-border mt-8 pt-8 text-center">
-          <p className="text-muted-foreground text-sm">
-            © 2024 المعهد التقني. جميع الحقوق محفوظة.
-          </p>
-        </div>
       </div>
     </footer>
   );

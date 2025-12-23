@@ -2,13 +2,13 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const router = require('./router/router')
-const pool = require('./config/db');
+const db = require('./config/db');
 const app = express();
 const port = process.env.PORT;
 
 // Connect DB
-pool.connect()
-  .then(() => console.log('✅ Connected to PostgreSQL'))
+db.query('SELECT 1')
+  .then(() => console.log(`✅ Connected to SQLite: ${db.dbFile}`))
   .catch(err => console.error('❌ DB error:', err));
 
 // Middlewares

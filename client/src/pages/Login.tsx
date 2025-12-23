@@ -7,31 +7,50 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { User, Mail, Key } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { useStudentAuth } from "@/context/StudentAuthContext";
 
 const API_BASE = import.meta.env.VITE_API_URL ?? "http://localhost:5050";
 
 const Login = () => {
+  const [loginMode, setLoginMode] = useState<"student" | "admin">("student");
   const [formData, setFormData] = useState({ email: "", studentId: "", password: "" });
+  const [adminData, setAdminData] = useState({ username: "", password: "" });
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { setStudentData, clearStudentData } = useStudentAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     try {
-      // Your backend route from App.jsx: POST /api/student-dashboard
+      if (loginMode === "admin") {
+        if (adminData.username === "admin" && adminData.password === "admin") {
+          localStorage.setItem("adminAuth", "true");
+          clearStudentData();
+          toast.success("تم تسجيل دخول الإدارة بنجاح ✅");
+          navigate("/admin/data");
+        } else {
+          toast.error("❌ بيانات الإدارة غير صحيحة");
+        }
+        return;
+      }
+
+      // Student login: POST /api/student-dashboard
       const { data } = await axios.post(`${API_BASE}/api/student-dashboard`, {
         email: formData.email,
         rollId: formData.studentId,
         password: formData.password,
       });
 
+      localStorage.removeItem("adminAuth");
+      setStudentData(data);
       // success → go to dashboard with data in route state
       toast.success("تم تسجيل الدخول بنجاح ✅");
-      navigate("/dashboard", { state: { studentData: data } });
+      navigate("/dashboard");
     } catch (err: any) {
       const status = err?.response?.status;
       if (status === 401 || status === 404) {
@@ -48,6 +67,9 @@ const Login = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setFormData((s) => ({ ...s, [e.target.name]: e.target.value }));
 
+  const handleAdminChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setAdminData((s) => ({ ...s, [e.target.name]: e.target.value }));
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -58,37 +80,89 @@ const Login = () => {
               <div className="mx-auto p-3 bg-primary/10 rounded-full w-fit">
                 <User className="h-8 w-8 text-primary" />
               </div>
-              <CardTitle className="text-2xl font-bold">تسجيل دخول الطلاب</CardTitle>
+              <CardTitle className="text-2xl font-bold">
+                {loginMode === "admin" ? "تسجيل دخول الإدارة" : "تسجيل دخول الطلاب"}
+              </CardTitle>
               <CardDescription>ادخل بياناتك للوصول إلى النظام الأكاديمي</CardDescription>
             </CardHeader>
             <CardContent>
+              <Tabs value={loginMode} onValueChange={(value) => setLoginMode(value as "student" | "admin")}>
+                <TabsList className="grid w-full grid-cols-2 mb-6">
+                  <TabsTrigger value="student">طالب</TabsTrigger>
+                  <TabsTrigger value="admin">إدارة</TabsTrigger>
+                </TabsList>
+              </Tabs>
               <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="space-y-2">
-                  <Label htmlFor="email" className="flex items-center gap-2">
-                    <Mail className="h-4 w-4 text-primary" /> البريد الإلكتروني
-                  </Label>
-                  <Input id="email" name="email" type="email" placeholder="student@example.com"
-                         value={formData.email} onChange={handleChange} required className="text-right" />
-                </div>
+                {loginMode === "admin" ? (
+                  <div className="space-y-2">
+                    <Label htmlFor="username" className="flex items-center gap-2">
+                      <User className="h-4 w-4 text-primary" /> اسم المستخدم
+                    </Label>
+                    <Input
+                      id="username"
+                      name="username"
+                      type="text"
+                      placeholder="admin"
+                      value={adminData.username}
+                      onChange={handleAdminChange}
+                      required
+                      className="text-right"
+                    />
+                  </div>
+                ) : (
+                  <>
+                    <div className="space-y-2">
+                      <Label htmlFor="email" className="flex items-center gap-2">
+                        <Mail className="h-4 w-4 text-primary" /> البريد الإلكتروني
+                      </Label>
+                      <Input
+                        id="email"
+                        name="email"
+                        type="email"
+                        placeholder="student@example.com"
+                        value={formData.email}
+                        onChange={handleChange}
+                        required
+                        className="text-right"
+                      />
+                    </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="studentId" className="flex items-center gap-2">
-                    <User className="h-4 w-4 text-primary" /> رقم القيد
-                  </Label>
-                  <Input id="studentId" name="studentId" type="text" placeholder="202312345"
-                         value={formData.studentId} onChange={handleChange} required className="text-right" />
-                </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="studentId" className="flex items-center gap-2">
+                        <User className="h-4 w-4 text-primary" /> رقم القيد
+                      </Label>
+                      <Input
+                        id="studentId"
+                        name="studentId"
+                        type="text"
+                        placeholder="202312345"
+                        value={formData.studentId}
+                        onChange={handleChange}
+                        required
+                        className="text-right"
+                      />
+                    </div>
+                  </>
+                )}
 
                 <div className="space-y-2">
                   <Label htmlFor="password" className="flex items-center gap-2">
                     <Key className="h-4 w-4 text-primary" /> كلمة المرور
                   </Label>
-                  <Input id="password" name="password" type="password" placeholder="••••••••"
-                         value={formData.password} onChange={handleChange} required className="text-right" />
+                  <Input
+                    id="password"
+                    name="password"
+                    type="password"
+                    placeholder="••••••••"
+                    value={loginMode === "admin" ? adminData.password : formData.password}
+                    onChange={loginMode === "admin" ? handleAdminChange : handleChange}
+                    required
+                    className="text-right"
+                  />
                 </div>
 
                 <Button type="submit" className="w-full py-6 text-base font-medium" disabled={loading}>
-                  {loading ? "جارٍ الدخول..." : "تسجيل الدخول"}
+                  {loading ? "جارٍ الدخول..." : loginMode === "admin" ? "دخول الإدارة" : "تسجيل الدخول"}
                 </Button>
 
                 <div className="text-center">

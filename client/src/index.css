@@ -5,6 +5,10 @@
 /* نظام التصميم للمعهد التقني - Academic Institute Design System */
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
   :root {
     /* الخلفيات والألوان الأساسية */
     --background: 0 0% 100%;
