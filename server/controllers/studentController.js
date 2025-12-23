@@ -23,13 +23,14 @@ exports.addDepartment = async (req, res) => {
 
 exports.addSemester = async (req, res) => {
   const { label, year, term_number, starts_on, ends_on } = req.body;
+  const termNumber = term_number ?? 1;
   try {
     const id = crypto.randomUUID();
     const sql = `
       INSERT INTO semesters (id, label, year, term_number, starts_on, ends_on)
       VALUES (?, ?, ?, ?, ?, ?)
     `;
-    await db.query(sql, [id, label, year, term_number, starts_on, ends_on]);
+    await db.query(sql, [id, label, year, termNumber, starts_on, ends_on]);
     const { rows } = await db.query(`SELECT * FROM semesters WHERE id = ?`, [id]);
     res.status(201).json(rows[0]);
   } catch (err) {
