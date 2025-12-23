@@ -54,7 +54,6 @@ const AdminDataEntry = () => {
   // Semester form
   const [semLabel, setSemLabel] = useState("");
   const [semYear, setSemYear] = useState(""); // keep as string; convert on submit
-  const [semTerm, setSemTerm] = useState(""); // keep as string; convert on submit
   const [semStart, setSemStart] = useState("");
   const [semEnd, setSemEnd] = useState("");
 
@@ -149,7 +148,7 @@ const AdminDataEntry = () => {
 
   const handleAddSemester = async (e) => {
     e.preventDefault();
-    if (!semLabel || semYear === "" || semTerm === "") {
+    if (!semLabel || semYear === "") {
       toast.error("الرجاء إكمال الحقول المطلوبة");
       return;
     }
@@ -157,14 +156,13 @@ const AdminDataEntry = () => {
       const { data } = await axios.post(`${API_BASE}/api/semesters`, {
         label: semLabel,
         year: Number(semYear),
-        term_number: Number(semTerm),
+        term_number: 1,
         starts_on: semStart || null,
         ends_on: semEnd || null,
       });
       pushSemester(data);
       setSemLabel("");
       setSemYear("");
-      setSemTerm("");
       setSemStart("");
       setSemEnd("");
       toast.success("تمت إضافة الفصل بنجاح");
@@ -503,31 +501,17 @@ const AdminDataEntry = () => {
                     required
                   />
                 </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="space-y-2">
-                    <Label htmlFor="semYear">السنة</Label>
-                    <Input
-                      id="semYear"
-                      type="number"
-                      placeholder="2025"
-                      value={semYear}
-                      onChange={(e) => setSemYear(e.target.value)}
-                      className="text-right"
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="semTerm">رقم الفصل</Label>
-                    <Input
-                      id="semTerm"
-                      type="number"
-                      placeholder="1"
-                      value={semTerm}
-                      onChange={(e) => setSemTerm(e.target.value)}
-                      className="text-right"
-                      required
-                    />
-                  </div>
+                <div className="space-y-2">
+                  <Label htmlFor="semYear">السنة</Label>
+                  <Input
+                    id="semYear"
+                    type="number"
+                    placeholder="2025"
+                    value={semYear}
+                    onChange={(e) => setSemYear(e.target.value)}
+                    className="text-right"
+                    required
+                  />
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
