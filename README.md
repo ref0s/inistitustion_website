@@ -51,7 +51,7 @@ npm start
 ## إعداد الواجهة
 1) الانتقال إلى مجلد الواجهة:
 ```bash
-cd ../client
+cd client
 ```
 
 2) تثبيت الاعتماديات:
@@ -59,12 +59,7 @@ cd ../client
 npm install
 ```
 
-3) (اختياري) تحديد عنوان الخادم:
-```env
-VITE_API_URL=http://localhost:5050
-```
-
-4) تشغيل الواجهة:
+3) تشغيل الواجهة:
 ```bash
 npm run dev
 ```

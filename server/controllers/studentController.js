@@ -23,8 +23,24 @@ exports.addDepartment = async (req, res) => {
 
 exports.addSemester = async (req, res) => {
   const { label, year, term_number, starts_on, ends_on } = req.body;
-  const termNumber = term_number ?? 1;
   try {
+    if (!label || year === undefined || year === null || year === "") {
+      return res.status(400).json({ error: 'label and year are required' });
+    }
+    let termNumber = term_number;
+    if (termNumber === undefined || termNumber === null || termNumber === "") {
+      const { rows } = await db.query(
+        `SELECT MAX(term_number) AS max_term FROM semesters WHERE year = ?`,
+        [year]
+      );
+      const maxTerm = rows[0]?.max_term;
+      termNumber = maxTerm ? Number(maxTerm) + 1 : 1;
+    } else {
+      termNumber = Number(termNumber);
+      if (Number.isNaN(termNumber) || termNumber < 1) {
+        return res.status(400).json({ error: 'term_number must be a positive number' });
+      }
+    }
     const id = crypto.randomUUID();
     const sql = `
       INSERT INTO semesters (id, label, year, term_number, starts_on, ends_on)
