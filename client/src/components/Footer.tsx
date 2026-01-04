@@ -1,5 +1,15 @@
 import { Mail, Phone, MapPin, Facebook, Twitter, Instagram } from "lucide-react";
 
+const departments = [
+  "قسم التقنيات الكربائية و الالكترونية (شعبة انظمة القدرة)",
+  "قسم المختبرات الطبية",
+  "قسم التمريض العام",
+  "قسم الحاسب الالي (شعبة تقنية المعلومات)",
+  "قسم ادارة الاعمال",
+  "قسم الصيدلية",
+  "قسم العلاج الطبيعي",
+];
+
 const Footer = () => {
   return (
     <footer className="bg-muted mt-20">
@@ -28,10 +38,11 @@ const Footer = () => {
           <div className="space-y-4">
             <h3 className="text-lg font-bold text-foreground">الأقسام الدراسية</h3>
             <ul className="space-y-2 text-sm">
-              <li className="text-muted-foreground">هندسة البرمجيات</li>
-              <li className="text-muted-foreground">تقنية المعلومات</li>
-              <li className="text-muted-foreground">الأمن السيبراني</li>
-              <li className="text-muted-foreground">الذكاء الاصطناعي</li>
+              {departments.map((dept) => (
+                <li key={dept} className="text-muted-foreground">
+                  {dept}
+                </li>
+              ))}
             </ul>
           </div>
 

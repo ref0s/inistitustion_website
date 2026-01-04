@@ -96,7 +96,7 @@ const Index = () => {
       <Header />
 
       {/* القسم الرئيسي */}
-      <section className="relative h-[600px] flex items-center justify-center overflow-hidden">
+      <section id="hero" className="relative h-[600px] flex items-center justify-center overflow-hidden">
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: `url(${instituteHero})` }}
@@ -166,37 +166,15 @@ const Index = () => {
         </div>
       </section>
 
-      {/* آخر الأخبار والإعلانات */}
-      <section id="news" className="py-20 bg-muted">
+      {/* رؤيتنا */}
+      <section className="py-16 bg-secondary/50">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-foreground mb-4">آخر الأخبار</h2>
-            <p className="text-xl text-muted-foreground">
-              تابع آخر الأخبار والفعاليات في المعهد
+          <div className="max-w-4xl mx-auto text-center space-y-4">
+            <h2 className="text-4xl font-bold text-foreground">رؤيتنا</h2>
+            <p className="text-lg text-muted-foreground leading-relaxed">
+              نؤمن أن الطالب يستحق رحلة دراسية واضحة ومحترمة، وأن المؤسسة تستحق أدوات تنظيم تجعل العمل أسهل والنتائج أفضل.
+              رؤيتنا هي جعل البيئة الأكاديمية أكثر اتساقًا واستقرارًا للجميع.
             </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {news.map((item, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow duration-300">
-                <CardHeader>
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
-                    <Calendar className="h-4 w-4" />
-                    {new Date(item.date).toLocaleDateString('ar-SA')}
-                  </div>
-                  <CardTitle className="text-lg leading-tight">{item.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="text-sm leading-relaxed">
-                    {item.description}
-                  </CardDescription>
-                  <Button variant="ghost" className="mt-4 p-0 h-auto text-primary hover:text-primary-dark">
-                    اقرأ المزيد
-                    <ArrowRight className="mr-1 h-4 w-4" />
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
           </div>
         </div>
       </section>
@@ -211,33 +189,33 @@ const Index = () => {
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            <Card className="text-center p-8">
-              <div className="mx-auto p-4 bg-primary/10 rounded-full w-fit mb-4">
-                <Phone className="h-8 w-8 text-primary" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto text-center">
+            <div className="space-y-2">
+              <div className="flex justify-center items-center gap-2 text-primary text-lg font-semibold">
+                <Phone className="h-5 w-5" />
+                <span>اتصل بنا</span>
               </div>
-              <h3 className="text-lg font-bold mb-2">اتصل بنا</h3>
               <p className="text-muted-foreground">+218 21 1234567</p>
               <p className="text-muted-foreground">+218 21 1234568</p>
-            </Card>
-            
-            <Card className="text-center p-8">
-              <div className="mx-auto p-4 bg-primary/10 rounded-full w-fit mb-4">
-                <Mail className="h-8 w-8 text-primary" />
+            </div>
+
+            <div className="space-y-2">
+              <div className="flex justify-center items-center gap-2 text-primary text-lg font-semibold">
+                <Mail className="h-5 w-5" />
+                <span>راسلنا</span>
               </div>
-              <h3 className="text-lg font-bold mb-2">راسلنا</h3>
               <p className="text-muted-foreground">info@techinstitute.edu.ly</p>
               <p className="text-muted-foreground">admin@techinstitute.edu.ly</p>
-            </Card>
-            
-            <Card className="text-center p-8">
-              <div className="mx-auto p-4 bg-primary/10 rounded-full w-fit mb-4">
-                <MapPin className="h-8 w-8 text-primary" />
+            </div>
+
+            <div className="space-y-2">
+              <div className="flex justify-center items-center gap-2 text-primary text-lg font-semibold">
+                <MapPin className="h-5 w-5" />
+                <span>زورونا</span>
               </div>
-              <h3 className="text-lg font-bold mb-2">زوروا</h3>
               <p className="text-muted-foreground">ترهونة</p>
               <p className="text-muted-foreground">ليبيا</p>
-            </Card>
+            </div>
           </div>
         </div>
       </section>

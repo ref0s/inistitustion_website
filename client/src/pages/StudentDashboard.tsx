@@ -6,10 +6,12 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { User, GraduationCap, BookOpen, Calendar, Award } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useStudentAuth } from "@/context/StudentAuthContext";
+import { Button } from "@/components/ui/button";
 
 const API_BASE = import.meta.env.VITE_API_URL ?? "http://localhost:5050";
 
@@ -30,6 +32,7 @@ const TIME_SLOTS = [
 
 const StudentDashboard = () => {
   const { studentData } = useStudentAuth();
+  const { clearStudentData } = useStudentAuth();
 
   const {
     data: scheduleData = [],
@@ -50,6 +53,37 @@ const StudentDashboard = () => {
   }
 
   const { headerCards, personalInfo, academicRecord } = studentData;
+
+  const calcAverage = (courses: any[]) => {
+    const grades = (courses || [])
+      .map((c: any) => c.grade)
+      .filter((g: any) => typeof g === "number");
+    if (!grades.length) return null;
+    const avg = grades.reduce((sum: number, g: number) => sum + g, 0) / grades.length;
+    return Number(avg.toFixed(1));
+  };
+
+  const semesterAverages = useMemo(() => {
+    const map = new Map<string, number | null>();
+    (academicRecord || []).forEach((entry: any) => {
+      map.set(entry.semester.id, calcAverage(entry.courses));
+    });
+    return map;
+  }, [academicRecord]);
+
+  const latestSemesterId = academicRecord?.[0]?.semester?.id;
+  const latestSemesterAvg = latestSemesterId ? semesterAverages.get(latestSemesterId) ?? null : null;
+
+  const overallAverage = useMemo(() => {
+    const allGrades = (academicRecord || [])
+      .flatMap((entry: any) => (entry.courses || []).map((c: any) => c.grade))
+      .filter((g: any) => typeof g === "number");
+    if (!allGrades.length) return null;
+    const avg = allGrades.reduce((sum: number, g: number) => sum + g, 0) / allGrades.length;
+    return Number(avg.toFixed(1));
+  }, [academicRecord]);
+
+  const formatAvg = (val: number | null) => (val === null ? "غير متوفر" : `${val}%`);
 
   const scheduleByCell = useMemo(() => {
     const map: Record<string, any[]> = {};
@@ -103,12 +137,12 @@ const StudentDashboard = () => {
 
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">المعدل التراكمي</CardTitle>
+                <CardTitle className="text-sm font-medium">المعدل الكلي</CardTitle>
                 <Award className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold text-right text-primary">
-                  {headerCards.gpaPercent}%
+                  {formatAvg(overallAverage)}
                 </div>
               </CardContent>
             </Card>
@@ -170,54 +204,67 @@ const StudentDashboard = () => {
                 <CardDescription>عرض جميع المواد والدرجات حسب الفصول الدراسية</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-6">
-                  {academicRecord.map((sem: any, i: number) => (
-                    <div key={i}>
-                      <h3 className="text-lg font-semibold mb-4 text-right">{sem.semester.label}</h3>
-                      <div className="space-y-3">
-                        {!sem.courses || sem.courses.length === 0 ? (
-                          <p className="text-sm text-muted-foreground text-right">
-                            لا توجد مواد مسجلة لهذا الفصل.
-                          </p>
-                        ) : (
-                          <Table>
-                            <TableHeader>
-                              <TableRow>
-                                <TableHead className="text-right">المادة</TableHead>
-                                <TableHead className="text-right">الرمز</TableHead>
-                                <TableHead className="text-right">الساعات</TableHead>
-                                <TableHead className="text-right">الدرجة</TableHead>
-                              </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                              {sem.courses.map((course: any, j: number) => {
-                                const gradeLabel =
-                                  course.grade === null || course.grade === undefined
-                                    ? "غير مسجلة"
-                                    : `${course.grade} درجة`;
-                                return (
-                                  <TableRow key={j}>
-                                    <TableCell className="text-right font-medium">{course.title}</TableCell>
-                                    <TableCell className="text-right text-muted-foreground">
-                                      {course.code}
-                                    </TableCell>
-                                    <TableCell className="text-right">{course.credit_hours}</TableCell>
-                                    <TableCell className="text-right">
-                                      <Badge variant={course.grade === null || course.grade === undefined ? "outline" : "secondary"}>
-                                        {gradeLabel}
-                                      </Badge>
-                                    </TableCell>
-                                  </TableRow>
-                                );
-                              })}
-                            </TableBody>
-                          </Table>
-                        )}
-                      </div>
-                      <Separator className="my-4" />
-                    </div>
-                  ))}
-                </div>
+                {academicRecord.length === 0 ? (
+                  <p className="text-sm text-muted-foreground text-right">لا توجد مواد مسجلة.</p>
+                ) : (
+                  <Tabs defaultValue={academicRecord[0]?.semester?.id || "0"}>
+                    <TabsList className="flex gap-2 justify-end overflow-x-auto max-w-full">
+                      {academicRecord.map((sem: any, i: number) => (
+                        <TabsTrigger key={sem.semester.id || i} value={sem.semester.id || String(i)}>
+                          {sem.semester.label}
+                        </TabsTrigger>
+                      ))}
+                    </TabsList>
+                    {academicRecord.map((sem: any, i: number) => {
+                      const semAvg = semesterAverages.get(sem.semester.id) ?? null;
+                      return (
+                        <TabsContent key={sem.semester.id || i} value={sem.semester.id || String(i)} className="mt-4 space-y-3">
+                          <div className="flex justify-end">
+                            <Badge variant="secondary">متوسط هذا الفصل: {formatAvg(semAvg)}</Badge>
+                          </div>
+                          {!sem.courses || sem.courses.length === 0 ? (
+                            <p className="text-sm text-muted-foreground text-right">
+                              لا توجد مواد مسجلة لهذا الفصل.
+                            </p>
+                          ) : (
+                            <Table>
+                              <TableHeader>
+                                <TableRow>
+                                  <TableHead className="text-right">المادة</TableHead>
+                                  <TableHead className="text-right">الرمز</TableHead>
+                                  <TableHead className="text-right">الساعات</TableHead>
+                                  <TableHead className="text-right">الدرجة</TableHead>
+                                </TableRow>
+                              </TableHeader>
+                              <TableBody>
+                                {sem.courses.map((course: any, j: number) => {
+                                  const gradeLabel =
+                                    course.grade === null || course.grade === undefined
+                                      ? "غير مسجلة"
+                                      : `${course.grade} درجة`;
+                                  return (
+                                    <TableRow key={j}>
+                                      <TableCell className="text-right font-medium">{course.title}</TableCell>
+                                      <TableCell className="text-right text-muted-foreground">
+                                        {course.code}
+                                      </TableCell>
+                                      <TableCell className="text-right">{course.credit_hours}</TableCell>
+                                      <TableCell className="text-right">
+                                        <Badge variant={course.grade === null || course.grade === undefined ? "outline" : "secondary"}>
+                                          {gradeLabel}
+                                        </Badge>
+                                      </TableCell>
+                                    </TableRow>
+                                  );
+                                })}
+                              </TableBody>
+                            </Table>
+                          )}
+                        </TabsContent>
+                      );
+                    })}
+                  </Tabs>
+                )}
               </CardContent>
             </Card>
           </div>

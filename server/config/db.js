@@ -35,4 +35,12 @@ const query = (sql, params = []) =>
     });
   });
 
-module.exports = { query, dbFile };
+const close = () =>
+  new Promise((resolve, reject) => {
+    db.close((err) => {
+      if (err) return reject(err);
+      return resolve();
+    });
+  });
+
+module.exports = { query, dbFile, close };

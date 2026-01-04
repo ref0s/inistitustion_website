@@ -12,8 +12,14 @@ import { User, Mail, Key } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useStudentAuth } from "@/context/StudentAuthContext";
+import { useAdminAuth } from "@/context/AdminAuthContext";
 
 const API_BASE = import.meta.env.VITE_API_URL ?? "http://localhost:5050";
+
+const getErrorMessage = (err: any, fallback: string) => {
+  const apiMsg = err?.response?.data?.error;
+  return apiMsg || err?.message || fallback;
+};
 
 const Login = () => {
   const [loginMode, setLoginMode] = useState<"student" | "admin">("student");
@@ -22,20 +28,19 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { setStudentData, clearStudentData } = useStudentAuth();
+  const { setCredentials } = useAdminAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     try {
       if (loginMode === "admin") {
-        if (adminData.username === "admin" && adminData.password === "admin") {
-          localStorage.setItem("adminAuth", "true");
-          clearStudentData();
-          toast.success("تم تسجيل دخول الإدارة بنجاح ✅");
-          navigate("/admin/data");
-        } else {
-          toast.error("❌ بيانات الإدارة غير صحيحة");
-        }
+        const header = `Basic ${btoa(`${adminData.username}:${adminData.password}`)}`;
+        await axios.get(`${API_BASE}/api/admin/me`, { headers: { Authorization: header } });
+        clearStudentData();
+        setCredentials({ username: adminData.username, password: adminData.password });
+        toast.success("تم تسجيل دخول الإدارة بنجاح ✅");
+        navigate("/admin");
         return;
       }
 
@@ -46,17 +51,18 @@ const Login = () => {
         password: formData.password,
       });
 
-      localStorage.removeItem("adminAuth");
+      setCredentials(null);
       setStudentData(data);
       // success → go to dashboard with data in route state
       toast.success("تم تسجيل الدخول بنجاح ✅");
       navigate("/dashboard");
     } catch (err: any) {
       const status = err?.response?.status;
+      const msg = getErrorMessage(err, "حدث خطأ أثناء تسجيل الدخول");
       if (status === 401 || status === 404) {
-        toast.error("❌ البيانات غير صحيحة");
+        toast.error(msg || "❌ البيانات غير صحيحة");
       } else {
-        toast.error("حدث خطأ أثناء تسجيل الدخول");
+        toast.error(msg);
       }
       console.error("login error:", err);
     } finally {

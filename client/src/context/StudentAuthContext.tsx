@@ -11,9 +11,7 @@ type StudentAuthContextValue = {
 const StudentAuthContext = createContext<StudentAuthContextValue | undefined>(undefined);
 
 const getStoredStudent = () => {
-  if (typeof window === "undefined") {
-    return null;
-  }
+  if (typeof window === "undefined") return null;
   try {
     const raw = localStorage.getItem("studentData");
     return raw ? JSON.parse(raw) : null;

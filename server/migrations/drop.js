@@ -5,19 +5,34 @@ const dropTables = async () => {
     await db.query('BEGIN');
 
     // Drop tables in reverse dependency order
-    await db.query(`DROP TABLE IF EXISTS enrollments;`);
-    await db.query(`DROP TABLE IF EXISTS students;`);
-    await db.query(`DROP TABLE IF EXISTS subject_schedule;`);
-    await db.query(`DROP TABLE IF EXISTS subjects;`);
-    await db.query(`DROP TABLE IF EXISTS semesters;`);
-    await db.query(`DROP TABLE IF EXISTS departments;`);
+    const tables = [
+      'timetable_entries',
+      'student_subjects',
+      'term_subjects',
+      'registrations',
+      'sections',
+      'periods',
+      'terms',
+      'department_subjects',
+      'subjects',
+      'students',
+      // legacy tables
+      'enrollments',
+      'subject_schedule',
+      'semesters',
+      'departments'
+    ];
+
+    for (const table of tables) {
+      await db.query(`DROP TABLE IF EXISTS ${table};`);
+    }
 
     await db.query('COMMIT');
-    console.log('✅ Migration 002_drop_students applied successfully.');
+    console.log('✅ Drop migration applied successfully.');
     process.exit(0);
   } catch (err) {
     await db.query('ROLLBACK');
-    console.error('❌ Error applying 002_drop_students migration:', err);
+    console.error('❌ Error applying drop migration:', err);
     process.exit(1);
   }
 };
